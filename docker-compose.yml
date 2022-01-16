@@ -1,0 +1,21 @@
+version: "3.9"
+   
+services:
+  web:
+    build: .
+    command: bash -c "python3 ./swallow/manage.py makemigrations && python3 ./swallow/manage.py migrate && python3 ./swallow/manage.py runserver 0.0.0.0:5000"
+    volumes:
+      - .:/code
+    ports:
+      - "5000:5000"
+    depends_on:
+      - db
+  db:
+    image: mysql:5.7
+    ports:
+      - "5306:3306"
+    volumes:
+      - ./db:/var/lib/mysql
+    environment:
+      - MYSQL_DATABASE=swallow
+      - MYSQL_ROOT_PASSWORD=123456
